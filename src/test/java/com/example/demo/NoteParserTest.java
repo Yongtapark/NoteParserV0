@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class NoteParserTest {
     @Test
-    @DisplayName("특정 문자열을 추출해 regex별로 id, note 로 구분하여 해시맵에 저장한다.")
+    @DisplayName("특정 문자열을 추출해 regex 별로 id, note 로 구분하여 해시맵에 저장한다.")
     void test1() {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
