@@ -27,13 +27,18 @@ public class NoteParser {
                 }
             }
 
-            for (int i = 0; i < idArray.length; i++) {
-                if (idArray[i] != null) {
-                    throw new NoteFormatException(content);
-                }
-            }
-
+            checkUnMatched(content, idArray);
+        }else{
+            throw new NoteFormatException(content);
         }
         return tags;
+    }
+
+    private static void checkUnMatched(String content, String[] idArray) {
+        for (int i = 0; i < idArray.length; i++) {
+            if (idArray[i] != null) {
+                throw new NoteFormatException(content);
+            }
+        }
     }
 }
