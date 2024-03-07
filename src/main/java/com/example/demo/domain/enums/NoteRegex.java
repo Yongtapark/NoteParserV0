@@ -23,11 +23,4 @@ public enum NoteRegex {
         return pattern;
     }
 
-    public String getIds(Matcher matcher){
-        return matcher.group(1);
-    }
-
-    public String getValue(Matcher matcher){
-        return matcher.group(2);
-    }
 }
