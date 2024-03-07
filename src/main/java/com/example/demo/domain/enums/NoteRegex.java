@@ -1,4 +1,4 @@
-package com.example.demo.enums;
+package com.example.demo.domain.enums;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

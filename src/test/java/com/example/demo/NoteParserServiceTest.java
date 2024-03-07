@@ -1,25 +1,27 @@
 package com.example.demo;
 
-import com.example.demo.domain.NoteParser;
 import com.example.demo.domain.enums.NoteRegex;
 import com.example.demo.domain.exceptions.NoteFormatException;
-import java.util.HashMap;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+
 @SpringBootTest
-@DisplayName("도메인 테스트")
-class NoteParserTest {
+@DisplayName("서비스 테스트")
+class NoteParserServiceTest {
+    @Autowired
+    private NoteParserService noteParserService;
+
     @Test
     @DisplayName("특정 문자열을 추출해 regex 별로 id, note 로 구분하여 해시맵에 저장한다.")
     void test1_BARN() {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
+        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
         for (HashMap<String, String> hashMap : tags.values()) {
@@ -29,14 +31,13 @@ class NoteParserTest {
         }
         Assertions.assertThat(note).isEqualTo(NOTE);
     }
+
     @Test
     @DisplayName("특정 문자열을 추출해 regex 별로 id, note 로 구분하여 해시맵에 저장한다.")
     void test1_PEN() {
         final String ID = "10-15";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
+        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
         for (HashMap<String, String> hashMap : tags.values()) {
@@ -51,9 +52,7 @@ class NoteParserTest {
     void test1_COW() {
         final String ID = "1015";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
+        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
         for (HashMap<String, String> hashMap : tags.values()) {
@@ -69,9 +68,7 @@ class NoteParserTest {
     void test2_justComma() {
         final String ID = "1번축사,";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
+        Assertions.assertThatThrownBy(() -> noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
     @Test
@@ -79,9 +76,7 @@ class NoteParserTest {
     void test2_specialCharacter() {
         final String ID = "1번축사@";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
+        Assertions.assertThatThrownBy(() -> noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
     @Test
@@ -89,9 +84,7 @@ class NoteParserTest {
     void test2_spaceBar() {
         final String ID = " ";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
+        Assertions.assertThatThrownBy(() -> noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
     @Test
@@ -99,9 +92,7 @@ class NoteParserTest {
     void test2_nothing() {
         final String ID = "";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
+        Assertions.assertThatThrownBy(() -> noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
 
@@ -112,9 +103,8 @@ class NoteParserTest {
         final String ID1 = "1번축사";
         final String ID2 = "2번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
-        tags = noteParser.extractAndSaveNote(tags, "[[" + IDS + "]] " + NOTE);
+        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
+
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";
@@ -124,10 +114,5 @@ class NoteParserTest {
         }
         Assertions.assertThat(note1).isEqualTo(NOTE);
         Assertions.assertThat(note2).isEqualTo(NOTE);
-    }
-
-    @Test
-    void test4() {
-
     }
 }

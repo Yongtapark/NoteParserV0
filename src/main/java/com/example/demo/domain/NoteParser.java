@@ -1,12 +1,15 @@
-package com.example.demo;
+package com.example.demo.domain;
 
-import static com.example.demo.enums.NoteRegex.NOTE_FORM;
+import static com.example.demo.domain.enums.NoteRegex.NOTE_FORM;
 
-import com.example.demo.enums.NoteRegex;
-import com.example.demo.exceptions.NoteFormatException;
+import com.example.demo.domain.enums.NoteRegex;
+import com.example.demo.domain.exceptions.NoteFormatException;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
-
+@Component
 public class NoteParser {
     public HashMap<NoteRegex, HashMap<String, String>> extractAndSaveNote(
             HashMap<NoteRegex, HashMap<String, String>> tags, String content) {
@@ -31,7 +34,7 @@ public class NoteParser {
         }else{
             throw new NoteFormatException(content);
         }
-        return tags;
+        return (HashMap<NoteRegex, HashMap<String, String>>) Map.copyOf(tags);
     }
 
     private static void checkUnMatched(String content, String[] idArray) {
