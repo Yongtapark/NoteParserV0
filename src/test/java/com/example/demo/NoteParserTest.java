@@ -4,6 +4,7 @@ import com.example.demo.domain.NoteParser;
 import com.example.demo.domain.enums.NoteRegex;
 import com.example.demo.domain.exceptions.NoteFormatException;
 import java.util.HashMap;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,11 @@ class NoteParserTest {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             if (hashMap.containsKey(ID)) {
                 note = hashMap.get(ID);
             }
@@ -35,11 +36,11 @@ class NoteParserTest {
         final String ID = "10-15";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             if (hashMap.containsKey(ID)) {
                 note = hashMap.get(ID);
             }
@@ -52,11 +53,11 @@ class NoteParserTest {
         final String ID = "1015";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             if (hashMap.containsKey(ID)) {
                 note = hashMap.get(ID);
             }
@@ -70,7 +71,7 @@ class NoteParserTest {
         final String ID = "1번축사,";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
@@ -80,7 +81,7 @@ class NoteParserTest {
         final String ID = "1번축사@";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
@@ -90,7 +91,7 @@ class NoteParserTest {
         final String ID = " ";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
@@ -100,7 +101,7 @@ class NoteParserTest {
         final String ID = "";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
@@ -113,12 +114,12 @@ class NoteParserTest {
         final String ID2 = "2번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        HashMap<NoteRegex, HashMap<String, String>> tags = new HashMap<>();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
         tags = noteParser.extractAndSaveNote(tags, "[[" + IDS + "]] " + NOTE);
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             note1 = hashMap.get(ID1);
             note2 = hashMap.get(ID2);
         }
@@ -127,7 +128,16 @@ class NoteParserTest {
     }
 
     @Test
+    @DisplayName("해시맵을 불변객체로 반환한다")
     void test4() {
+        final String IDS = "1번축사,2번축사";
+        final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
+        NoteParser noteParser = new NoteParser();
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        tags = noteParser.extractAndSaveNote(tags, "[[" + IDS + "]] " + NOTE);
+        Map<String, String> unmodifiableMap = tags.get(NoteRegex.BARN);
+        Assertions.assertThatThrownBy(()->unmodifiableMap.put("tmp","temp")).isInstanceOf(UnsupportedOperationException.class);
+
 
     }
 }

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest
 @DisplayName("서비스 테스트")
@@ -21,10 +21,10 @@ class NoteParserServiceTest {
     void test1_BARN() {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             if (hashMap.containsKey(ID)) {
                 note = hashMap.get(ID);
             }
@@ -37,10 +37,10 @@ class NoteParserServiceTest {
     void test1_PEN() {
         final String ID = "10-15";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             if (hashMap.containsKey(ID)) {
                 note = hashMap.get(ID);
             }
@@ -52,10 +52,10 @@ class NoteParserServiceTest {
     void test1_COW() {
         final String ID = "1015";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             if (hashMap.containsKey(ID)) {
                 note = hashMap.get(ID);
             }
@@ -103,16 +103,28 @@ class NoteParserServiceTest {
         final String ID1 = "1번축사";
         final String ID2 = "2번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
 
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";
-        for (HashMap<String, String> hashMap : tags.values()) {
+        for (Map<String, String> hashMap : tags.values()) {
             note1 = hashMap.get(ID1);
             note2 = hashMap.get(ID2);
         }
         Assertions.assertThat(note1).isEqualTo(NOTE);
         Assertions.assertThat(note2).isEqualTo(NOTE);
+    }
+
+    @Test
+    @DisplayName("해시맵을 불변객체로 반환한다")
+    void test4() {
+        final String IDS = "1번축사,2번축사";
+        final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
+        Map<NoteRegex, Map<String, String>> tags = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
+        Map<String, String> unmodifiableMap = tags.get(NoteRegex.BARN);
+        Assertions.assertThatThrownBy(()->unmodifiableMap.put("tmp","temp")).isInstanceOf(UnsupportedOperationException.class);
+
+
     }
 }
