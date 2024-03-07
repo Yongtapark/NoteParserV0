@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.domain.enums.NoteRegex;
+import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +22,8 @@ public class NoteParserController {
 
 
     @PostMapping("/parse")
-    public ResponseEntity<HashMap<NoteRegex, HashMap<String, String>> > parseNote(@RequestBody String content) {
-        HashMap<NoteRegex, HashMap<String, String>> tags = noteParserService.saveContentUseNoteParser(content);
+    public ResponseEntity<Map<NoteRegex, Map<String, String>> > parseNote(@RequestBody String content) {
+        Map<NoteRegex, Map<String, String>> tags = noteParserService.saveContentUseNoteParser(content);
         return ResponseEntity.ok(tags);
     }
 }
