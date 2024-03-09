@@ -20,7 +20,7 @@ public class NoteParser {
                 String[] idArray = ids.split(",");
 
                 findEachRegexAndSaveNotes(noteContainer, ids, idArray, noteAndIdList, note);
-                checkDismatchIds(eachContent, idArray);
+                checkDissmatchIds(eachContent, idArray);
             } else {
                 throw new NoteFormatException(content);
             }
@@ -47,7 +47,7 @@ public class NoteParser {
         }
     }
 
-    private static void checkDismatchIds(String eachContent, String[] idArray) {
+    private static void checkDissmatchIds(String eachContent, String[] idArray) {
         for (int i = 0; i < idArray.length; i++) {
             if (idArray[i] != null) {
                 throw new NoteFormatException(eachContent);
