@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 public enum NoteRegex {
     BARN(Pattern.compile("^(\\d+번축사)(,\\d+번축사)*$")),
     PEN(Pattern.compile("^(\\d+-\\d+)(,\\d+-\\d+)*$")),
-    COW(Pattern.compile("^((\\d{4})(,\\d{4})*)$")),
-    NOTE_FORM(Pattern.compile("\\[\\[([^\\]]+)\\]\\] (.*)"));
+    COW(Pattern.compile("^((\\d{4})(,\\d{4})*)$"));
 
     private final Pattern pattern;
 
@@ -21,6 +20,9 @@ public enum NoteRegex {
 
     public Pattern getCompile() {
         return pattern;
+    }
+    public static Matcher getNoteFormMatcher(String strPattern){
+        return Pattern.compile("\\[\\[([^\\]]+)\\]\\] (.*)").matcher(strPattern);
     }
 
 }
