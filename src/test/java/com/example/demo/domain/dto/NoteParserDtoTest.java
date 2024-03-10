@@ -24,9 +24,9 @@ class NoteParserDtoTest {
     void test1_check_shallow_immunity() {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
-        Map<NoteRegex, NoteAndIdList> immutableMap = noteContainer.getImmutableMap();
+        Map<NoteRegex, NoteAndIdList> immutableMap = noteParserDto.getNoteContainerMap();
 
         assertThatThrownBy(()->immutableMap.put(BARN,new NoteAndIdList())).isInstanceOf(UnsupportedOperationException.class);
     }
@@ -38,9 +38,9 @@ class NoteParserDtoTest {
         final String TEMP_ID = "테스트 아이디";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         final String TEMP_NOTE = "테스트 노트";
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
-        Map<NoteRegex, NoteAndIdList> immutableMap = noteContainer.getImmutableMap();
+        Map<NoteRegex, NoteAndIdList> immutableMap = noteParserDto.getNoteContainerMap();
         NoteAndIdList noteAndIdList = immutableMap.get(BARN);
         List<NoteAndId> immutableList = noteAndIdList.getImmutableList();
 

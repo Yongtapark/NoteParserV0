@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.domain.dto.NoteParserDto;
 import com.example.demo.domain.note_parser.NoteContainer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,7 @@ public class NoteParserController {
 
 
     @PostMapping("/parse")
-    public ResponseEntity<NoteContainer> parseNote(@RequestBody String content) {
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser(content);
-        return ResponseEntity.ok(noteContainer);
+    public ResponseEntity<NoteParserDto> parseNote(@RequestBody String content) {
+        return ResponseEntity.ok(noteParserService.saveContentUseNoteParser(content));
     }
 }

@@ -1,11 +1,14 @@
 package com.example.demo;
 
+import com.example.demo.domain.dto.NoteParserDto;
+import com.example.demo.domain.enums.NoteRegex;
 import com.example.demo.domain.note_parser.NoteAndId;
 import com.example.demo.domain.note_parser.NoteAndIdList;
 import com.example.demo.domain.note_parser.NoteContainer;
 import com.example.demo.domain.exceptions.NoteFormatException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +26,8 @@ class NoteParserServiceTest {
     void test1_BARN() {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, NoteAndIdList> noteContainer = noteParserDto.getNoteContainerMap();
 
         String note = "NOTHING";
         Collection<NoteAndIdList> variableList = noteContainer.values();
@@ -43,7 +47,8 @@ class NoteParserServiceTest {
     void test1_PEN() {
         final String ID = "10-15";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, NoteAndIdList> noteContainer = noteParserDto.getNoteContainerMap();
 
         String note = "NOTHING";
         Collection<NoteAndIdList> variableList = noteContainer.values();
@@ -62,7 +67,8 @@ class NoteParserServiceTest {
     void test1_COW() {
         final String ID = "1015";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, NoteAndIdList> noteContainer = noteParserDto.getNoteContainerMap();
 
         String note = "NOTHING";
         Collection<NoteAndIdList> variableList = noteContainer.values();
@@ -117,7 +123,8 @@ class NoteParserServiceTest {
         final String ID1 = "1번축사";
         final String ID2 = "2번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        NoteContainer noteContainer = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
+        Map<NoteRegex, NoteAndIdList> noteContainer = noteParserDto.getNoteContainerMap();
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";

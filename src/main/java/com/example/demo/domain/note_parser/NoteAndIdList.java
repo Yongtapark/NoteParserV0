@@ -1,8 +1,8 @@
 package com.example.demo.domain.note_parser;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
-
 public class NoteAndIdList {
     List<NoteAndId> noteAndIds;
 
@@ -25,6 +25,7 @@ public class NoteAndIdList {
        return List.copyOf(noteAndIds);
     }
 
+    @JsonIgnore
     public NoteAndIdList getImmutableNoteAndIdList(){
         return new NoteAndIdList(getImmutableList());
     }
