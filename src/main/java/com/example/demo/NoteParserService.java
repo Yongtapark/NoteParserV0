@@ -1,8 +1,10 @@
 package com.example.demo;
 
 import com.example.demo.domain.enums.NoteRegex;
+import com.example.demo.domain.note_parser.IdAndNote;
 import com.example.demo.domain.note_parser.NoteParser;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,8 @@ public class NoteParserService {
         this.noteParser = noteParser;
     }
 
-    public Map<NoteRegex, Map<String, String>> saveContentUseNoteParser(String content) {
-        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+    public Map<NoteRegex, List<IdAndNote>> saveContentUseNoteParser(String content) {
+        Map<NoteRegex, List<IdAndNote>> tags = new HashMap<>();
         return noteParser.extractAndSaveNote(tags, content);
     }
 }
