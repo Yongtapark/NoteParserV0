@@ -14,10 +14,6 @@ public enum NoteRegex {
         this.pattern = pattern;
     }
 
-    public Matcher extractString(String strPattern) {
-        return getCompile().matcher(strPattern);
-    }
-
     public Pattern getCompile() {
         return pattern;
     }
