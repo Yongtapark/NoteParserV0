@@ -2,12 +2,9 @@ package com.example.demo;
 
 import com.example.demo.domain.enums.NoteRegex;
 import com.example.demo.domain.exceptions.NoteFormatException;
-import com.example.demo.domain.note_parser.NoteAndId;
-import com.example.demo.domain.note_parser.NoteAndIdList;
-import com.example.demo.domain.note_parser.NoteContainer;
 import com.example.demo.domain.note_parser.NoteParser;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,20 +19,15 @@ class NoteParserTest {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        noteContainer = noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        Collection<NoteAndIdList> variableList = noteContainer.values();
-        for (NoteAndIdList value : variableList) {
-            List<NoteAndId> immutableList = value.getImmutableList();
-            for (NoteAndId noteAndId : immutableList) {
-                if (noteAndId.id().equals(ID)) {
-                    note = noteAndId.note();
-                }
+        for (Map<String, String> hashMap : tags.values()) {
+            if (hashMap.containsKey(ID)) {
+                note = hashMap.get(ID);
             }
         }
-
         Assertions.assertThat(note).isEqualTo(NOTE);
     }
 
@@ -45,17 +37,13 @@ class NoteParserTest {
         final String ID = "10-15";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        noteContainer = noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        Collection<NoteAndIdList> variableList = noteContainer.values();
-        for (NoteAndIdList value : variableList) {
-            List<NoteAndId> immutableList = value.getImmutableList();
-            for (NoteAndId noteAndId : immutableList) {
-                if (noteAndId.id().equals(ID)) {
-                    note = noteAndId.note();
-                }
+        for (Map<String, String> hashMap : tags.values()) {
+            if (hashMap.containsKey(ID)) {
+                note = hashMap.get(ID);
             }
         }
         Assertions.assertThat(note).isEqualTo(NOTE);
@@ -67,17 +55,13 @@ class NoteParserTest {
         final String ID = "1015";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        noteContainer = noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        tags = noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        Collection<NoteAndIdList> variableList = noteContainer.values();
-        for (NoteAndIdList value : variableList) {
-            List<NoteAndId> immutableList = value.getImmutableList();
-            for (NoteAndId noteAndId : immutableList) {
-                if (noteAndId.id().equals(ID)) {
-                    note = noteAndId.note();
-                }
+        for (Map<String, String> hashMap : tags.values()) {
+            if (hashMap.containsKey(ID)) {
+                note = hashMap.get(ID);
             }
         }
         Assertions.assertThat(note).isEqualTo(NOTE);
@@ -89,8 +73,8 @@ class NoteParserTest {
         final String ID = "1번축사,";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE))
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
 
@@ -100,8 +84,8 @@ class NoteParserTest {
         final String ID = "1번축사@";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE))
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
 
@@ -111,8 +95,8 @@ class NoteParserTest {
         final String ID = " ";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE))
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
 
@@ -122,84 +106,55 @@ class NoteParserTest {
         final String ID = "";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(noteContainer, "[[" + ID + "]] " + NOTE))
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        Assertions.assertThatThrownBy(() -> noteParser.extractAndSaveNote(tags, "[[" + ID + "]] " + NOTE))
                 .isInstanceOf(NoteFormatException.class);
     }
 
     @Test
     @DisplayName("복수로 id값을 입력하면 두 id에 동일한 note 가 저장된다.")
-    void test3_twoId_oneNote() {
+    void test3() {
         final String IDS = "1번축사,2번축사";
         final String ID1 = "1번축사";
         final String ID2 = "2번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        noteContainer = noteParser.extractAndSaveNote(noteContainer, "[[" + IDS + "]] " + NOTE);
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        tags = noteParser.extractAndSaveNote(tags, "[[" + IDS + "]] " + NOTE);
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";
-        Collection<NoteAndIdList> variableList = noteContainer.values();
-        for (NoteAndIdList value : variableList) {
-            List<NoteAndId> immutableList = value.getImmutableList();
-            for (NoteAndId noteAndId : immutableList) {
-                if (noteAndId.id().equals(ID1)) {
-                    note1 = noteAndId.note();
-                } else if (noteAndId.id().equals(ID2)) {
-                    note2 = noteAndId.note();
-                }
-            }
+        for (Map<String, String> hashMap : tags.values()) {
+            note1 = hashMap.get(ID1);
+            note2 = hashMap.get(ID2);
         }
         Assertions.assertThat(note1).isEqualTo(NOTE);
         Assertions.assertThat(note2).isEqualTo(NOTE);
     }
 
     @Test
-    @DisplayName("엔터로 구분하여 각각의 id와 노트를 저장한다.")
-    void test3_twoId_eachNote() {
+    @DisplayName("서로 다른 regex 를 동시에 저장하면 각자의 반환값을 가진다.")
+    void test4() {
         final String ID1 = "1번축사";
         final String ID2 = "2번축사";
-        final String NOTE1 = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지1";
-        final String NOTE2 = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지2";
+        final String ID3 = "3-1";
+        final String NOTE1 = "몸살이 났다. 머리가 지끈거린다.";
+        final String NOTE2 = "로나였다. 죽다 살아났다.";
+        final String NOTE3 = "다시 재미있는 코딩을 시작해보자";
         NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-        noteContainer = noteParser.extractAndSaveNote(noteContainer,
-                "[[" + ID1 + "]] " + NOTE1 + System.lineSeparator() + "[[" + ID2 + "]] " + NOTE2);
+        Map<NoteRegex, Map<String, String>> tags = new HashMap<>();
+        tags = noteParser.extractAndSaveNote(tags, "[[" + ID1 + "]] " + NOTE1 + System.lineSeparator()
+                + "[[" + ID2 + "]] " + NOTE2 + System.lineSeparator()
+                + "[[" + ID3 + "]] " + NOTE3);
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";
-        Collection<NoteAndIdList> variableList = noteContainer.values();
-        for (NoteAndIdList value : variableList) {
-            List<NoteAndId> immutableList = value.getImmutableList();
-            for (NoteAndId noteAndId : immutableList) {
-                if (noteAndId.id().equals(ID1)) {
-                    note1 = noteAndId.note();
-                } else if (noteAndId.id().equals(ID2)) {
-                    note2 = noteAndId.note();
-                }
-            }
-        }
+        String note3 = "NOTHING";
+        note1 = tags.get(NoteRegex.BARN).get(ID1);
+        note2 = tags.get(NoteRegex.BARN).get(ID2);
+        note3 = tags.get(NoteRegex.PEN).get(ID3);
         Assertions.assertThat(note1).isEqualTo(NOTE1);
         Assertions.assertThat(note2).isEqualTo(NOTE2);
-    }
-
-    @Test
-    @DisplayName("같은 NoteRegex에 대해 서로 다른 두 줄이 독립적으로 처리되는지 검증한다.")
-    void test5_separateProcessing_forSameNoteRegex() {
-        final String ID1 = "1번축사";
-        final String NOTE1 = "첫 번째 노트 내용";
-        final String NOTE2 = "두 번째 노트 내용";
-        NoteParser noteParser = new NoteParser();
-        NoteContainer noteContainer = new NoteContainer();
-
-        String combinedNotes = "[[" + ID1 + "]] " + NOTE1 + System.lineSeparator() +
-                "[[" + ID1 + "]] " + NOTE2;
-        noteContainer = noteParser.extractAndSaveNote(noteContainer, combinedNotes);
-
-        NoteAndIdList notes = noteContainer.getNotes(NoteRegex.BARN);
-        Assertions.assertThat(notes.getImmutableList()).hasSize(2);
-        Assertions.assertThat(notes.get(0).note()).isEqualTo(NOTE1);
-        Assertions.assertThat(notes.get(1).note()).isEqualTo(NOTE2);
+        Assertions.assertThat(note3).isEqualTo(NOTE3);
     }
 }
