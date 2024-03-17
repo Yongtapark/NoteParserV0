@@ -1,17 +1,14 @@
 package com.example.demo;
 
-import com.example.demo.domain.enums.NoteRegex;
 import com.example.demo.domain.exceptions.NoteFormatException;
 import com.example.demo.domain.note_parser.IdAndNote;
+import com.example.demo.domain.dtos.NoteParserDto;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Map;
 
 @SpringBootTest
 @DisplayName("서비스 테스트")
@@ -24,10 +21,11 @@ class NoteParserServiceTest {
     void test1_BARN() {
         final String ID = "1번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        Map<NoteRegex, List<IdAndNote>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+
 
         String note = "NOTHING";
-        for (List<IdAndNote> idAndNoteList : tags.values()) {
+        for (List<IdAndNote> idAndNoteList : noteParserDto.tags().values()) {
             if (idAndNoteList.contains(new IdAndNote(ID,NOTE))) {
                 int i = idAndNoteList.indexOf(new IdAndNote(ID, NOTE));
                 note = idAndNoteList.get(i).note();
@@ -41,10 +39,10 @@ class NoteParserServiceTest {
     void test1_PEN() {
         final String ID = "10-15";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        Map<NoteRegex, List<IdAndNote>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (List<IdAndNote> idAndNoteList : tags.values()) {
+        for (List<IdAndNote> idAndNoteList : noteParserDto.tags().values()) {
             if (idAndNoteList.contains(new IdAndNote(ID,NOTE))) {
                 int i = idAndNoteList.indexOf(new IdAndNote(ID, NOTE));
                 note = idAndNoteList.get(i).note();
@@ -57,10 +55,10 @@ class NoteParserServiceTest {
     void test1_COW() {
         final String ID = "1015";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        Map<NoteRegex, List<IdAndNote>> tags = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + ID + "]] " + NOTE);
 
         String note = "NOTHING";
-        for (List<IdAndNote> idAndNoteList : tags.values()) {
+        for (List<IdAndNote> idAndNoteList : noteParserDto.tags().values()) {
             if (idAndNoteList.contains(new IdAndNote(ID,NOTE))) {
                 int i = idAndNoteList.indexOf(new IdAndNote(ID, NOTE));
                 note = idAndNoteList.get(i).note();
@@ -109,12 +107,11 @@ class NoteParserServiceTest {
         final String ID1 = "1번축사";
         final String ID2 = "2번축사";
         final String NOTE = "오늘 저녁도 카레 샐러드다. 내일은 뭘 먹지";
-        Map<NoteRegex, List<IdAndNote>> tags = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
-
+        NoteParserDto noteParserDto = noteParserService.saveContentUseNoteParser("[[" + IDS + "]] " + NOTE);
 
         String note1 = "NOTHING";
         String note2 = "NOTHING";
-        for (List<IdAndNote> idAndNoteList : tags.values()) {
+        for (List<IdAndNote> idAndNoteList : noteParserDto.tags().values()) {
             if (idAndNoteList.contains(new IdAndNote(ID1,NOTE))) {
                 int i = idAndNoteList.indexOf(new IdAndNote(ID1, NOTE));
                 note1 = idAndNoteList.get(i).note();

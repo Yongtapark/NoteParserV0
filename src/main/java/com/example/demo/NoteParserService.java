@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.domain.enums.NoteRegex;
 import com.example.demo.domain.note_parser.IdAndNote;
+import com.example.demo.domain.dtos.NoteParserDto;
 import com.example.demo.domain.note_parser.NoteParser;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +18,8 @@ public class NoteParserService {
         this.noteParser = noteParser;
     }
 
-    public Map<NoteRegex, List<IdAndNote>> saveContentUseNoteParser(String content) {
+    public NoteParserDto saveContentUseNoteParser(String content) {
         Map<NoteRegex, List<IdAndNote>> tags = new HashMap<>();
-        return noteParser.extractAndSaveNote(tags, content);
+        return new NoteParserDto(noteParser.extractAndSaveNote(tags, content));
     }
 }
