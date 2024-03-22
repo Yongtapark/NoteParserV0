@@ -34,7 +34,7 @@ class NoteParserControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    NoteParserService noteParserService; // 컨
+    NoteParserService noteParserService;
     @Test
     @DisplayName("api 응답을 검증한다.")
     void test1() throws Exception {
